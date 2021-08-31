@@ -2,9 +2,13 @@ class Balance:
     def __init__(self, events, destination):
         self.destination = destination
         self.events = events
+        self.total = self.calculate()
+
+    def calculate(self):
+        total = 0.0
+        for event in self.events:
+            total += float(event.amount)
+        return total
 
     def json(self):
-        destination_balance = 0.0
-        for event in self.events:
-            destination_balance += float(event.amount)
-        return {"destination": {"id": self.destination, "balance": str(destination_balance)}}
+        return {"destination": {"id": self.destination, "balance": str(self.total)}}
