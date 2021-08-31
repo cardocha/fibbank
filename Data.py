@@ -20,9 +20,8 @@ class Data:
     def fetch_events(self, destination):
         events = []
         self.open_file('r')
-        for line in self.file:
-            line_fields = line.split(',')
-            event = Event(line_fields)
+        for line in self.file.readlines():
+            event = Event.from_file_line(line)
             if event.destination == destination:
                 events.append(event)
         self.file.close()

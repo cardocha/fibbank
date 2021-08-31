@@ -20,7 +20,7 @@ def event():
     data = Data()
     data.store(new_event)
     account_events = data.fetch_events(account_id)
-    return Balance(account_events, account_id), 201
+    return Balance(account_events, account_id).json(), 201
 
 
 @app.route("/balance", methods=['GET'])
