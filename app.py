@@ -1,6 +1,7 @@
 from flask import Flask, request
 
 from Data import Data
+from model.Balance import Balance
 from model.Event import Event
 
 app = Flask(__name__)
@@ -15,10 +16,15 @@ def reset():
 @app.route("/event", methods=['POST'])
 def event():
     new_event = Event(request.get_json())
-    Data().store(new_event)
-    return {"destination": {"id": event.destination, "balance": 10}}, 201
+    account_id = new_event.destination
+    data = Data()
+    data.store(new_event)
+    account_events = data.fetch_events(account_id)
+    return Balance(account_events, account_id), 201
 
 
 @app.route("/balance", methods=['GET'])
 def balance():
-    return ''
+    account_id = request.form['account_id']
+    account_events = Data().fetch_events(account_id)
+    return Balance(account_events, account_id)

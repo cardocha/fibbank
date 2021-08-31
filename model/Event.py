@@ -3,10 +3,17 @@ from model.EventType import EventType
 
 class Event:
     def __init__(self, json):
-        self.type = event_type
-        self.origin = origin
-        self.destination = destination
-        self.amount = amount
+        self.type = json['type']
+        self.origin = json['origin']
+        self.destination = json['destination']
+        self.amount = json['amount']
+        self.update_amount()
+
+    def __init__(self, fields):
+        self.type = fields[0]
+        self.origin = fields[1]
+        self.destination = fields[2]
+        self.amount = fields[3]
         self.update_amount()
 
     def update_amount(self):
