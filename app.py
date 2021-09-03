@@ -1,7 +1,6 @@
 from flask import Flask, request
 
 from Data import Data
-from model.Balance import Balance
 from service.BalanceService import BalanceService
 from service.EventService import EventService
 
@@ -30,11 +29,4 @@ def event():
 @app.route("/balance", methods=['GET'])
 def balance():
     account_id = request.args.get("account_id")
-    account_events = BalanceService(account_id).fetch_events()
-
-    if len(account_events) == 0:
-        return "0", 404
-
-    account_balance = Balance(account_events, account_id)
-    balance_int = int(account_balance.total)
-    return str(balance_int), 200
+    return BalanceService(account_id).fetch()
