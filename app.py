@@ -1,7 +1,7 @@
 from flask import Flask, request
 
 from Data import Data
-from model.Event import Event
+from model.Balance import Balance
 from service.BalanceService import BalanceService
 from service.EventService import EventService
 
@@ -11,15 +11,30 @@ app = Flask(__name__)
 @app.route("/reset", methods=['POST'])
 def reset():
     Data().clear()
-    return "", 200
+    return "OK", 200
 
 
 @app.route("/event", methods=['POST'])
 def event():
-    account_id = EventService(request.get_json()).store()
-    return BalanceService(account_id).fetch_as_json(), 201
+    json_request = request.get_json()
+    if json_request['type'] == 'deposit':
+        return EventService(json_request).deposit()
+
+    if json_request['type'] == 'withdraw':
+        return EventService(json_request).withdraw()
+
+    if json_request['type'] == 'transfer':
+        return EventService(json_request).transfer()
 
 
 @app.route("/balance", methods=['GET'])
 def balance():
-    return BalanceService(request.form['account_id']).fetch_as_json(), 201
+    account_id = request.args.get("account_id")
+    account_events = BalanceService(account_id).fetch_events()
+
+    if len(account_events) == 0:
+        return "0", 404
+
+    account_balance = Balance(account_events, account_id)
+    balance_int = int(account_balance.total)
+    return str(balance_int), 200

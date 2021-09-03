@@ -17,12 +17,10 @@ class Data:
         self.file.write(event.to_file_line())
         self.file.close()
 
-    def fetch_events(self, destination):
+    def fetch_events(self):
         events = []
         self.open_file('r')
         for line in self.file.readlines():
-            event = Event.from_file_line(line)
-            if event.destination == destination:
-                events.append(event)
+            events.append(Event.from_file_line(line))
         self.file.close()
         return events

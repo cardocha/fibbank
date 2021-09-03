@@ -1,25 +1,17 @@
-from model.EventType import EventType
-
-
 class Event:
     def __init__(self, json):
         self.type = json['type']
-        self.origin = Event.find_origin(json)
-        self.destination = json['destination']
+        self.origin = Event.optional_field(json, 'origin')
+        self.destination = Event.optional_field(json, 'destination')
         self.amount = json['amount']
-        self.update_amount()
-
-    def update_amount(self):
-        if self.type == EventType.WITHDRAW:
-            self.amount = -self.amount
 
     def to_file_line(self):
         return "{},{},{},{}\r\n".format(self.type, self.origin, self.destination, self.amount)
 
     @staticmethod
-    def find_origin(json):
-        if 'origin' in json:
-            return json['origin']
+    def optional_field(json, field):
+        if field in json:
+            return json[field]
         return 0
 
     @staticmethod
