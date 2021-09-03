@@ -1,7 +1,9 @@
 # FibBank
 Simple service solution  for a code challenge.
 
-Tests: http://dd2a-177-220-177-211.ngrok.io 
+Tests:
+https://ipkiss.pragmazero.com/ with 
+http://dd2a-177-220-177-211.ngrok.io 
 
 ## Getting Started
 The source is a Flask and Pycharm project
